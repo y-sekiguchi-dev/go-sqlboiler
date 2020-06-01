@@ -11,13 +11,11 @@ import (
 )
 
 type repository struct {
-	ctx sqlboiler.Context
 	adapter adapter
 }
 
-func NewRepository(ctx sqlboiler.Context) domain.PersonRepository {
+func NewRepository() domain.PersonRepository {
 	return &repository{
-		ctx:     ctx,
 		adapter: adapter{},
 	}
 }
@@ -55,18 +53,18 @@ func loadChildren(ctx context.Context, exec boil.ContextExecutor, p *models.Pers
 	return p.L.LoadChildren(ctx, exec, true, p, nil)
 }
 
-func (repo *repository) FindById(id domain.PersonId) (domain.Person, error) {
-	if downstream, err := models.FindPerson(repo.ctx, repo.ctx, int64(id.AsPersistForm())); err != nil{
+func (repo *repository) FindById(ctx context.Context, id domain.PersonId) (domain.Person, error) {
+	if downstream, err := models.FindPerson(ctx, sqlboiler.ToExec(ctx), int64(id.AsPersistForm())); err != nil{
 		return nil, err
 	} else {
 		return repo.adapter.toEntity(downstream), nil
 	}
 }
 
-func (repo *repository) Store(person domain.Person) error {
+func (repo *repository) Store(ctx context.Context, person domain.Person) error {
 	ds := repo.adapter.toDownStream(person)
 	if shared.IsEmpty(person.Id()) {
-		if err := ds.Insert(repo.ctx, repo.ctx, boil.Whitelist(
+		if err := ds.Insert(ctx, sqlboiler.ToExec(ctx), boil.Whitelist(
 			"first_name", "last_name", "birthday", "personality", "create_user_id", "update_user_id",
 			)); err != nil {
 			return err

@@ -3,19 +3,24 @@ package function
 import "reflect"
 
 // When it has an error, error() returns error and values has only one element of error.
-type Returns struct {
+type Returns interface {
+	Error() error
+	Value(index int) interface{}
+}
+
+type ReturnsImpl struct {
 	values []interface{}
 	errIndex int
 }
 
 func ErrReturns(err error) Returns {
-	return Returns {
+	return &ReturnsImpl {
 		[]interface{}{err},
 		0,
 	}
 }
 
-func (r *Returns) Error() error {
+func (r *ReturnsImpl) Error() error {
 	return r.values[r.errIndex].(error)
 }
 
@@ -23,7 +28,7 @@ func (r *Returns) Error() error {
 // When wrapped function returns (int, string, error), value(0) returns int value,
 // value(1) returns string and value(2) returns nil as type interface{}.
 // Casting the return value to the original type will always success.
-func (r *Returns) Value(index int) interface{} {
+func (r *ReturnsImpl) Value(index int) interface{} {
 	return r.values[index]
 }
 
@@ -55,6 +60,6 @@ func Parse(fn interface{}) AnyFunc {
 		for i, output := range outputs {
 			returns[i] = output.Interface()
 		}
-		return Returns{returns, errIdx}
+		return &ReturnsImpl{returns, errIdx}
 	}
 }

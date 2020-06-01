@@ -1,7 +1,9 @@
 package model
 
+import "context"
+
 type PersonRepository interface {
-	FindById(id PersonId) (Person, error)
-	Store(person Person) error
+	FindById(ctc context.Context, id PersonId) (Person, error)
+	Store(ctc context.Context, person Person) error
 }
 
