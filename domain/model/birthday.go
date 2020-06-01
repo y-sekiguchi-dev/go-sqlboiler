@@ -17,12 +17,19 @@ func NewBirthday(year int, month time.Month, day int) (Birthday, error) {
 	return Birthday{t}, nil
 }
 
-func (b *Birthday) Age() uint {
+func NewBirthdayFromTime(time time.Time) (Birthday, error) {
+	return NewBirthday(time.Year(), time.Month(), time.Day())
+}
+
+func (b Birthday) Age() uint {
 	today := today()
 	age := today.Year() - today.Year()
 	return uint(age)
 }
 
+func (b Birthday) AsTime() time.Time {
+	return b.birthday
+}
 func today() time.Time {
 	now := time.Now().Local()
 	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local)

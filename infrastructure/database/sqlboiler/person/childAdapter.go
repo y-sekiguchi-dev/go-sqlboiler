@@ -1,21 +1,29 @@
 package person
 
 import (
-	"go-sqlboiler/domain/model"
-	"go-sqlboiler/infrastructure/database/sqlboiler/models"
-	"time"
+	domain "go-sqlboiler/domain/model"
+	sqlboiler "go-sqlboiler/infrastructure/database/sqlboiler/models"
 )
 
-func toDownStream(personId model.PersonId, upstream *model.Child) *models.Child {
+type childAdapter struct {
+
+}
+
+func (ca *childAdapter) toDownStream(upstream domain.Child) *sqlboiler.Child {
 	fullName := upstream.FullName()
-	personId.
-	return &models.Child{
-		PersonID:  0,
+	return &sqlboiler.Child{
 		SubNo:     int8(upstream.SubNo()),
 		FirstName: fullName.FirstName(),
 		LastName:  fullName.LastName(),
-		Birthday:  time.Time{}
+		Birthday: upstream.Birthday().AsTime(),
 	}
 }
 
-func toUpStream(downstream *models.Person) *model.Person {
+func (ca *childAdapter) toEntity(downstream *sqlboiler.Child) domain.Child {
+	birthday, _ := domain.NewBirthdayFromTime(downstream.Birthday)
+	return domain.NewChild(
+		uint(downstream.SubNo),
+		domain.NewFullName(downstream.FirstName, downstream.LastName),
+		birthday,
+		)
+}

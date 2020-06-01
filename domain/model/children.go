@@ -1,22 +1,22 @@
 package model
 
 type Children struct {
-	wrapped []*Child
+	wrapped []Child
 }
 
 func NewChildren() Children {
-	return Children{make([]*Child, 0, 100)}
+	return Children{make([]Child, 0, 100)}
 }
 
 func (c *Children) add(child Child) bool {
 	if c.contains(child) {
 		return false
 	}
-	c.wrapped = append(c.wrapped, &child)
+	c.wrapped = append(c.wrapped, child)
 	return true
 }
 
-func (c *Children) findById(subNo uint) *Child {
+func (c *Children) findById(subNo uint) Child {
 	if index := c.indexOf(subNo); index < 0 {
 		return nil
 	} else {
@@ -41,7 +41,7 @@ func (c *Children) count() int {
 	return len(c.wrapped)
 }
 
-func (c *Children) remove(subNo uint) *Child {
+func (c *Children) remove(subNo uint) Child {
 	i := c.indexOf(subNo)
 	if i < 0 {
 		return nil

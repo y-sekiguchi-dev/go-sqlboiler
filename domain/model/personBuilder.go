@@ -2,7 +2,6 @@ package model
 
 import (
 	"go-sqlboiler/domain/model/shared"
-	"strconv"
 )
 
 type PersonBuilder struct {
@@ -10,18 +9,18 @@ type PersonBuilder struct {
 	version *shared.VersionableImpl
 	deleted *shared.DeletableImpl
 	birthday Birthday
-	personality Personality
+	personality *Personality
 	fullName FullName
 	children Children
 	hasPartner bool
 }
 
-func (pb *PersonBuilder) Personality(personality Personality) *PersonBuilder {
+func (pb *PersonBuilder) Personality(personality *Personality) *PersonBuilder {
 	pb.personality = personality
 	return pb
 }
 
-func (pb *PersonBuilder) addChild(child Child) *PersonBuilder {
+func (pb *PersonBuilder) AddChild(child Child) *PersonBuilder {
 	pb.children.add(child)
 	return pb
 }
@@ -39,9 +38,9 @@ func AsNew(birthday Birthday, fullName FullName) *PersonBuilder {
 	}
 }
 
-func AsStored(id uint, version uint, deleted bool, birthday Birthday, fullName FullName) *PersonBuilder {
+func AsStored(id PersonId, version uint, deleted bool, birthday Birthday, fullName FullName) *PersonBuilder {
 	return &PersonBuilder{
-		shared.IdenticalEntityImpl(newPersonId(id)),
+		shared.IdenticalEntityImpl(id),
 		shared.StoredVersionableImpl(version),
 		shared.StoredDeletableImpl(deleted),
 		birthday,
@@ -52,7 +51,7 @@ func AsStored(id uint, version uint, deleted bool, birthday Birthday, fullName F
 	}
 }
 
-func (pb *PersonBuilder) build() Person {
+func (pb *PersonBuilder) Build() Person {
 	return & personImpl{
 		pb.entity,
 		pb.version,

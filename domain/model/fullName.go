@@ -9,22 +9,22 @@ func NewFullName(firstName string, lastName string) FullName {
 	return FullName{firstName, lastName}
 }
 
-func (f *FullName) AsString(sep string) string {
+func (f FullName) AsString(sep string) string {
 	return f.firstName + sep + f.lastName
 }
 
-func (f *FullName) WithFirstName(firstName string) FullName {
+func (f FullName) WithFirstName(firstName string) FullName {
 	return NewFullName(firstName, f.lastName)
 }
 
-func (f *FullName) WithLastName(lastName string) FullName {
+func (f FullName) WithLastName(lastName string) FullName {
 	return NewFullName(f.firstName, lastName)
 }
 
-func  (f *FullName) FirstName() string {
+func (f FullName) FirstName() string {
 	return f.firstName
 }
 
-func  (f *FullName) LastName() string {
+func (f FullName) LastName() string {
 	return f.lastName
 }
