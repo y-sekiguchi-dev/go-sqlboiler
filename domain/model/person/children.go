@@ -1,4 +1,4 @@
-package model
+package person
 
 type Children struct {
 	wrapped []Child
@@ -6,6 +6,12 @@ type Children struct {
 
 func NewChildren() Children {
 	return Children{make([]Child, 0, 100)}
+}
+
+func (c *Children) view() []Child {
+	result := make([]Child, c.count())
+	copy(result, c.wrapped)
+	return result
 }
 
 func (c *Children) add(child Child) bool {

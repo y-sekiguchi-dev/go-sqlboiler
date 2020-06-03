@@ -1,17 +1,17 @@
 package person
 
 import (
-	"github.com/volatiletech/null"
-	domain "go-sqlboiler/domain/model"
+	"go-sqlboiler/domain/model/person"
 	sqlboiler "go-sqlboiler/infrastructure/database/sqlboiler/models"
 	"time"
+
+	"github.com/volatiletech/null"
 )
 
 type adapter struct {
-
 }
 
-func (a *adapter) toDownStream(entity domain.Person) *sqlboiler.Person {
+func (a *adapter) toDownStream(entity person.Person) *sqlboiler.Person {
 	fullName := entity.FullName()
 	personality := null.Int8FromPtr(nil)
 	if entity.Personality() != nil {
@@ -28,17 +28,17 @@ func (a *adapter) toDownStream(entity domain.Person) *sqlboiler.Person {
 	}
 }
 
-func (a *adapter) toEntity(downstream *sqlboiler.Person) domain.Person {
-	birthday, _ := domain.NewBirthdayFromTime(downstream.Birthday)
-	builder := domain.AsStored(
-			newPersonId(uint(downstream.PersonID)),
-			uint(downstream.Version),
-			downstream.Deleted,
-			birthday,
-			domain.NewFullName(downstream.FirstName, downstream.LastName),
-		)
+func (a *adapter) toEntity(downstream *sqlboiler.Person) person.Person {
+	birthday, _ := person.NewBirthdayFromTime(downstream.Birthday)
+	builder := person.AsStored(
+		newPersonId(uint(downstream.PersonID)),
+		uint(downstream.Version),
+		downstream.Deleted,
+		birthday,
+		person.NewFullName(downstream.FirstName, downstream.LastName),
+	)
 	if downstream.Personality.Valid {
-		builder.Personality(domain.GetPersonalityFrom(uint(downstream.Personality.Int8)))
+		builder.Personality(person.GetPersonalityFrom(uint(downstream.Personality.Int8)))
 	}
 	ca := childAdapter{}
 	for _, child := range downstream.R.Children {

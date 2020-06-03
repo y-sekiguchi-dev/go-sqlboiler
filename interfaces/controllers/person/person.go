@@ -1,8 +1,9 @@
 package person
 
 import (
-	"github.com/gin-gonic/gin"
 	"go-sqlboiler/usecase/person"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Controller interface {
@@ -11,22 +12,22 @@ type Controller interface {
 	put(c *gin.Context)
 }
 
-type impl struct {
+type controller struct {
 	useCase person.UseCase
 }
 
 func NewPersonController(useCase person.UseCase) Controller {
-	return &impl{useCase: useCase}
+	return &controller{useCase: useCase}
 }
 
-func (i *impl) get(c *gin.Context) {
+func (i *controller) get(c *gin.Context) {
 	// TODO
 }
 
-func (i *impl) post(c *gin.Context) {
+func (i *controller) post(c *gin.Context) {
 	// TODO
 }
 
-func (i *impl) put(c *gin.Context) {
+func (i *controller) put(c *gin.Context) {
 	// TODO
 }

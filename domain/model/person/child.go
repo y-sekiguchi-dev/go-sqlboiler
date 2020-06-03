@@ -1,4 +1,4 @@
-package model
+package person
 
 type Child interface {
 	SubNo() uint
@@ -7,32 +7,32 @@ type Child interface {
 	Birthday() Birthday
 }
 
-type ChildImpl struct {
-	subNo uint
+type child struct {
+	subNo    uint
 	fullName FullName
 	birthday Birthday
 }
 
-func NewChild(subNo uint, fullName FullName, birthday Birthday) Child {
-	return &ChildImpl{
+func StoredChild(subNo uint, fullName FullName, birthday Birthday) Child {
+	return &child{
 		subNo:    subNo,
 		fullName: fullName,
 		birthday: birthday,
 	}
 }
 
-func (c *ChildImpl) SubNo() uint {
+func (c *child) SubNo() uint {
 	return c.subNo
 }
 
-func (c *ChildImpl) FullName() FullName {
+func (c *child) FullName() FullName {
 	return c.fullName
 }
 
-func (c *ChildImpl) Age() uint {
+func (c *child) Age() uint {
 	return c.Birthday().Age()
 }
 
-func (c *ChildImpl) Birthday() Birthday {
+func (c *child) Birthday() Birthday {
 	return c.birthday
 }

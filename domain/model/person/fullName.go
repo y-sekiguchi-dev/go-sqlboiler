@@ -1,8 +1,8 @@
-package model
+package person
 
 type FullName struct {
 	firstName string
-	lastName string
+	lastName  string
 }
 
 func NewFullName(firstName string, lastName string) FullName {

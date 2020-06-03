@@ -14,22 +14,22 @@ type ProvidedResult interface {
 	Transactional(fn interface{}) function.AnyFunc
 }
 
-type impl struct {
-	ctx context.Context
+type provider struct {
+	ctx       context.Context
 	decorator func(fn interface{}) function.AnyFunc
 }
 
 func NewProvidedResult(ctx context.Context, decorator func(fn interface{}) function.AnyFunc) ProvidedResult {
-	return &impl{
+	return &provider{
 		ctx:       ctx,
 		decorator: decorator,
 	}
 }
 
-func (pr *impl) Context() context.Context {
+func (pr *provider) Context() context.Context {
 	return pr.ctx
 }
 
-func (pr *impl) Transactional(fn interface{}) function.AnyFunc {
+func (pr *provider) Transactional(fn interface{}) function.AnyFunc {
 	return pr.decorator(fn)
 }

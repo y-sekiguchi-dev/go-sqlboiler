@@ -1,7 +1,7 @@
 package person
 
 import (
-	"go-sqlboiler/domain/model"
+	"go-sqlboiler/domain/model/person"
 	"strconv"
 )
 
@@ -17,6 +17,6 @@ func (pid *idImpl) AsPersistForm() uint {
 	return pid.id
 }
 
-func newPersonId(id uint) model.PersonId {
+func newPersonId(id uint) person.Id {
 	return &idImpl{id}
 }
