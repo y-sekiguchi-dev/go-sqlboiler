@@ -41,7 +41,7 @@ func newTransactionAwareContext(ctx context.Context) (*transactionAware, error) 
 
 type provider struct{}
 
-func newTransactionProvider() transaction.Provider {
+func NewTransactionProvider() transaction.Provider {
 	return &provider{}
 }
 

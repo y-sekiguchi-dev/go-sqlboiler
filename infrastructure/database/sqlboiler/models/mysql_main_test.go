@@ -18,8 +18,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/kat-co/vala"
 	"github.com/spf13/viper"
-	"github.com/volatiletech/randomize"
-	"github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-mysql/driver"
+	"github.com/volatiletech/sqlboiler/drivers/sqlboiler-mysql/driver"
+	"github.com/volatiletech/sqlboiler/randomize"
 )
 
 var rgxMySQLkey = regexp.MustCompile(`(?m)((,\n)?\s+CONSTRAINT.*?FOREIGN KEY.*?\n)+`)

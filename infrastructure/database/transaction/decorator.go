@@ -6,25 +6,24 @@ import (
 )
 
 func decorate(target function.AnyFunc, tx driver.Tx) function.AnyFunc {
-	abort := func (err error) function.Returns {
+	abort := func(err error) function.Returns {
 		tx.Rollback()
 		return function.ErrReturns(err)
 	}
 	return func(args ...interface{}) function.Returns {
-		var result function.Returns
 		defer func() {
-			if p := recover(); p!=nil {
+			if p := recover(); p != nil {
 				tx.Rollback()
 				panic(p)
 			}
-			if err := result.Error(); err != nil {
-				result = abort(err)
-			}
-			if err := tx.Commit(); err != nil {
-				result = abort(err)
-			}
 		}()
-		result = target(args...)
+		result := target(args...)
+		if err := result.Error(); err != nil {
+			return abort(err)
+		}
+		if err := tx.Commit(); err != nil {
+			return abort(err)
+		}
 		return result
 	}
 }

@@ -1,13 +1,13 @@
 package injector
 
 import (
-	"go-sqlboiler/infrastructure/database/sqlboiler"
+	injector2 "go-sqlboiler/infrastructure/database/sqlboiler/injector"
 	controllers "go-sqlboiler/interfaces/controllers/person"
 	useCase "go-sqlboiler/usecase/person"
 )
 
 type injector struct {
-	boilInjector sqlboiler.Injector
+	boilInjector injector2.Injector
 }
 
 func (i *injector) NewPersonController() controllers.Controller {
